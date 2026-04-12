@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Tosu Realtime KPS Overlay</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="kps-header" id="key-container"></div>
+
+    <div class="chart-container">
+        <canvas id="kpsChart"></canvas>
+    </div>
+
+    <div class="footer-stats">
+        <div class="stat-box">
+            <div class="stat-label">Total KPS</div>
+            <div class="stat-val" id="val-total">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Peak KPS (5 Min)</div>
+            <div class="stat-val peak" id="val-peak">0</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

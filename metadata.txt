@@ -1,0 +1,5 @@
+Name: KPS-Chart
+Author: Xingjian
+Version: 1.0
+Resolution: 450x400
+authorLinks: https://github.com/timetetng/tosu-kps.git

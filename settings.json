@@ -1,0 +1,60 @@
+[
+  {
+    "uniqueID": "keyMode",
+    "type": "options",
+    "title": "Key Mode / 按键监听模式",
+    "description": "选择你需要监听的按键类型和数量",
+    "options": [
+      "Standard (K1,K2,M1,M2)",
+      "Standard (K1,K2)",
+      "Standard (M1,M2)",
+      "Mania 4K",
+      "Mania 5K",
+      "Mania 6K",
+      "Mania 7K",
+      "Mania 8K",
+      "Mania 9K"
+    ],
+    "value": "Standard (K1,K2,M1,M2)"
+  },
+  {
+    "uniqueID": "keyNames",
+    "type": "text",
+    "title": "Key Names / 按键显示名 (逗号分隔)",
+    "description": "按顺序自定义每个键显示的名称，用英文逗号隔开 (例如: Z,X 或 S,D,Space,J,K)",
+    "options": [],
+    "value": "W,A,S,D"
+  },
+  {
+    "uniqueID": "useAverageColor",
+    "type": "checkbox",
+    "title": "Dynamic Color / 动态提取背景色",
+    "description": "开启后自动根据当前谱面的背景图变化主题颜色",
+    "options": [],
+    "value": true
+  },
+  {
+    "uniqueID": "customThemeColor",
+    "type": "color",
+    "title": "Custom Theme Color / 自定义主题颜色",
+    "description": "关闭动态提取后生效的固定颜色",
+    "options": [],
+    "value": "#4caf50"
+  },
+  {
+    "uniqueID": "bgOpacity",
+    "type": "number",
+    "title": "Background Opacity / 背景透明度",
+    "description": "面板背景的透明度 (建议范围 0.0 - 1.0)",
+    "options": [],
+    "value": 0.65
+  },
+  {
+    "uniqueID": "chartMaxY",
+    "type": "number",
+    "title": "Chart Max Height / 图表最大高度",
+    "description": "折线图 Y 轴的建议最大值",
+    "options": [],
+    "value": 15
+  }
+]

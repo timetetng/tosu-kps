@@ -1,0 +1,100 @@
+:root {
+    var(--theme-color): rgb(76, 175, 80);
+    var(--theme-color-glow): rgba(76, 175, 80, 0.5);
+    --glass-bg: rgba(0, 0, 0, 0.65);
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: transparent; 
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+.kps-header {
+    display: flex;
+    justify-content: center;
+    gap: 8px; 
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.key-box {
+    background: var(--glass-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 2px;
+    border-radius: 12px;
+    flex: 1;
+    min-width: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: background 0.1s;
+}
+
+.key-name {
+    font-size: 13px;
+    color: #ddd;
+    margin-bottom: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 文字过长时显示省略号 */
+}
+
+.key-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--theme-color);
+    text-shadow: 0 0 8px var(--theme-color-glow);
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.chart-container {
+    width: 100%;
+    height: 160px;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.footer-stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.stat-box { flex: 1; }
+
+.stat-label {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.stat-val {
+    font-size: 26px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.stat-val.peak {
+    color: var(--theme-color); 
+    text-shadow: 0 0 8px var(--theme-color-glow);
+    transition: color 0.3s, text-shadow 0.3s;
+}
