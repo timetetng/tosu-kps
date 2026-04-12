@@ -155,8 +155,15 @@ function applyPluginSettings() {
         const match = pluginConfig.keyMode.match(/(\d)K/);
         const count = match ? parseInt(match[1]) : 4;
         activeKeys = [];
-        for(let i = 1; i <= count; i++) {
-            activeKeys.push(`k${i}`); 
+        
+        // 修复：针对 Mania 4K 进行特殊处理，使其映射到 tosu 实际输出的 k1, k2, m1, m2
+        if (count === 4) {
+            activeKeys = ['k1', 'k2', 'm1', 'm2'];
+        } else {
+            // 注意：5K 及以上按键需要 tosu 底层接口支持输出 k5 等字段，否则仍然只有部分按键生效
+            for(let i = 1; i <= count; i++) {
+                activeKeys.push(`k${i}`); 
+            }
         }
     }
     
