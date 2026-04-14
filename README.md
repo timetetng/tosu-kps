@@ -1,6 +1,7 @@
 # Tosu KPS
 
 A KPS overlay for osu power by tosu.
+
 ![demo](./demo.png)
 
 # Install
