@@ -1,6 +1,6 @@
 # Tosu KPS
 
-A KPS overlay for osu power by tosu.
+A KPS overlay for osu power by [tosu](https://tosu.app).
 
 ![demo](./demo.png)
 
