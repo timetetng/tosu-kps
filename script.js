@@ -132,8 +132,9 @@ function updateThemeColor(colorStr) {
 }
 
 // 应用配置到 UI 和逻辑
+// 应用配置到 UI 和逻辑
 function applyPluginSettings() {
-    // 1. 更新图表 Y 轴最大值
+    // 1. 更新图表 Y 轴最大值 (基础值，后续会动态调整)
     chart.options.scales.y.max = pluginConfig.chartMaxY;
     
     // 2. 更新背景透明度
@@ -180,6 +181,7 @@ function applyPluginSettings() {
         const displayName = customNames[index] || key.toUpperCase();
         const keyBox = document.createElement('div');
         keyBox.className = 'key-box'; 
+        keyBox.id = `box-${key}`; // 新增：赋予唯一的 ID 以便后续操作动画
         keyBox.innerHTML = `
             <div class="key-name">${displayName}</div>
             <div class="key-value" id="val-${key}">0</div>
@@ -189,7 +191,6 @@ function applyPluginSettings() {
 
     console.log("[KPS Plugin] 配置已应用:", pluginConfig);
 }
-
 // 建立设置同步通道
 function connectSettings() {
     let rawPath = window.COUNTER_PATH || new URLSearchParams(window.location.search).get('l');
@@ -301,19 +302,33 @@ function connectData() {
                 }
             }
             
-            // --- 统计按键逻辑 ---
+            // --- 统计按键逻辑与动画反馈 ---
             const keys = data.gameplay.keyOverlay;
             if (keys) {
                 activeKeys.forEach(key => {
                     if (keys[key]) {
+                        // KPS 计数逻辑
                         const currentCount = keys[key].count;
                         if (currentCount > lastCounts[key]) {
                             const diff = currentCount - lastCounts[key];
-                            for (let i = 0; i < diff; i++) {
-                                clickTimestamps[key].push(Date.now());
+                            
+                            if (diff <= 30) {
+                                for (let i = 0; i < diff; i++) {
+                                    clickTimestamps[key].push(Date.now());
+                                }
                             }
                         }
                         lastCounts[key] = currentCount;
+
+                        // 新增：按键按下状态 (isPressed) 的视觉动画反馈
+                        const boxEl = document.getElementById(`box-${key}`);
+                        if (boxEl) {
+                            if (keys[key].isPressed) {
+                                boxEl.classList.add('pressed');
+                            } else {
+                                boxEl.classList.remove('pressed');
+                            }
+                        }
                     }
                 });
             }
@@ -321,7 +336,6 @@ function connectData() {
     };
     socket.onclose = () => setTimeout(connectData, 2000);
 }
-
 connectData();
 
 // 图表与峰值统计更新循环 (每秒执行一次)
@@ -335,11 +349,21 @@ setInterval(() => {
     const dataArray = chart.data.datasets[0].data;
     dataArray.push(maxKpsThisSecond);
     if (dataArray.length > MAX_DATA_POINTS) dataArray.shift();
-    chart.update();
 
     // 更新 5 分钟 (300秒) 内的最高 KPS
     const peak = Math.max(...dataArray);
     document.getElementById('val-peak').innerText = peak;
+
+    // 动态计算纵坐标高度
+    // 算法：以 10 为步长向上取整 (例如 35->40)。如果恰好是10的倍数(40->50)，保证顶部留白空间。
+    let dynamicMaxY = Math.ceil(peak / 10) * 10;
+    if (dynamicMaxY === peak && peak > 0) {
+        dynamicMaxY += 10;
+    }
+    
+    // 图表的最终高度取 "动态计算结果" 与 "用户设置的图表基础高度(如15)" 中的较大值
+    chart.options.scales.y.max = Math.max(pluginConfig.chartMaxY, dynamicMaxY);
+    chart.update();
 
     // 重置下一秒的峰值探测
     maxKpsThisSecond = 0; 

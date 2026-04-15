@@ -31,19 +31,34 @@ body {
     flex: 1;
     min-width: 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    transition: background 0.1s;
+    /* 增加了过渡动画效果 */
+    transition: background 0.1s, transform 0.05s, border-color 0.1s, box-shadow 0.1s;
+}
+
+/* 新增：按键按下的高亮状态 */
+.key-box.pressed {
+    background: var(--theme-color-glow);
+    border-color: var(--theme-color);
+    transform: scale(0.92); /* 按下时稍微缩小 */
+    box-shadow: 0 0 15px var(--theme-color-glow);
 }
 
 .key-name {
-    font-size: 13px;
+    font-size: 20px; /* 字体从 13px 调大 */
     color: #ddd;
     margin-bottom: 4px;
-    font-weight: 600;
+    font-weight: 700; /* 加粗 */
     text-transform: uppercase;
     letter-spacing: 1px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* 文字过长时显示省略号 */
+    text-overflow: ellipsis;
+    transition: color 0.1s;
+}
+
+/* 新增：按下时字母颜色变白 */
+.key-box.pressed .key-name {
+    color: #fff;
 }
 
 .key-value {
@@ -52,6 +67,12 @@ body {
     color: var(--theme-color);
     text-shadow: 0 0 8px var(--theme-color-glow);
     transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* 新增：按下时数字发光增强 */
+.key-box.pressed .key-value {
+    color: #fff;
+    text-shadow: 0 0 12px #fff;
 }
 
 .chart-container {
