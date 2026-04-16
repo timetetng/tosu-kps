@@ -273,6 +273,7 @@ function updateRealtimeUI() {
 requestAnimationFrame(updateRealtimeUI);
 
 // 游戏数据连接
+// 游戏数据连接
 function connectData() {
     const socket = new WebSocket('ws://127.0.0.1:24050/ws');
     socket.onmessage = (msg) => {
@@ -294,7 +295,7 @@ function connectData() {
                     if (bgUrl !== currentBgUrl) {
                         currentBgUrl = bgUrl;
                         extractAverageColor(bgUrl, (rgbColor) => {
-                            if (pluginConfig.useAverageColor) { // 再次确认配置是否仍然开启
+                            if (pluginConfig.useAverageColor) { 
                                 updateThemeColor(rgbColor);
                             }
                         });
@@ -309,8 +310,11 @@ function connectData() {
                     if (keys[key]) {
                         // KPS 计数逻辑
                         const currentCount = keys[key].count;
+                        let isClickedThisFrame = false; // 新增：记录这一帧内是否发生了点击
+
                         if (currentCount > lastCounts[key]) {
                             const diff = currentCount - lastCounts[key];
+                            isClickedThisFrame = true; // 只要总数增加，必定按过
                             
                             if (diff <= 30) {
                                 for (let i = 0; i < diff; i++) {
@@ -320,13 +324,28 @@ function connectData() {
                         }
                         lastCounts[key] = currentCount;
 
-                        // 新增：按键按下状态 (isPressed) 的视觉动画反馈
+                        // 优化：按键按下状态 (isPressed) 的视觉动画反馈
                         const boxEl = document.getElementById(`box-${key}`);
                         if (boxEl) {
                             if (keys[key].isPressed) {
+                                // 1. 如果底层检测到正在长按，保持常亮
                                 boxEl.classList.add('pressed');
+                                if (boxEl.pressTimeout) clearTimeout(boxEl.pressTimeout);
+                                boxEl.pressTimeout = null;
+                            } else if (isClickedThisFrame) {
+                                // 2. 如果没检测到长按，但是 count 增加了（手速太快发生了极短的点击）
+                                boxEl.classList.add('pressed');
+                                if (boxEl.pressTimeout) clearTimeout(boxEl.pressTimeout);
+                                // 强行保留 60 毫秒的高亮动画，保证肉眼绝对能看见它亮了
+                                boxEl.pressTimeout = setTimeout(() => {
+                                    boxEl.classList.remove('pressed');
+                                    boxEl.pressTimeout = null;
+                                }, 60); 
                             } else {
-                                boxEl.classList.remove('pressed');
+                                // 3. 正常抬起且没有在倒计时中
+                                if (!boxEl.pressTimeout) {
+                                    boxEl.classList.remove('pressed');
+                                }
                             }
                         }
                     }
@@ -337,7 +356,6 @@ function connectData() {
     socket.onclose = () => setTimeout(connectData, 2000);
 }
 connectData();
-
 // 图表与峰值统计更新循环 (每秒执行一次)
 setInterval(() => {
     if (!isPlaying) {
